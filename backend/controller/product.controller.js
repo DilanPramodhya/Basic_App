@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Product from "../../models/product.model.js";
+import Product from "../models/product.model.js";
 
 export const GetProducts = async (req, res) => {
   try {
@@ -38,7 +38,9 @@ export const UpdateProduct = async (req, res) => {
   const product = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ success: false, message: "Product Not found" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Product Not found" });
   }
   try {
     const updatedProduct = await Product.findByIdAndUpdate(id, product, {
@@ -56,7 +58,9 @@ export const DeleteProduct = async (req, res) => {
   // console.log("Id : ", id);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ success: false, message: "Invalid Product ID" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid Product ID" });
   }
   try {
     await Product.findByIdAndDelete(id);
