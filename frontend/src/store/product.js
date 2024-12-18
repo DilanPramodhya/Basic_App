@@ -58,4 +58,25 @@ export const useProductStore = create((set) => ({
       return { success: false, message: "An unexpected error occurred" };
     }
   },
+  updateProduct: async (pid, updatedProduct) => {
+    const res = await fetch(`http://localhost:5000/api/product/${pid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProduct),
+    });
+    const data = await res.json();
+    if (!data.success) {
+      return { success: false, message: data.message };
+    }
+    // Update state immediately for UI feedback
+    set((state) => ({
+      products: state.products.map((product) =>
+        product._id === pid ? data.data : product
+      ),
+    }));
+
+    return { success: true, message: "Product Updated Successfully" };
+  },
 }));
