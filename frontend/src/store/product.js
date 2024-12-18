@@ -26,4 +26,36 @@ export const useProductStore = create((set) => ({
     set({ products: data.data });
     return { success: true, message: "Product Created Successfully" };
   },
+  deleteProduct: async (pid) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/product/${pid}`, {
+        method: "DELETE",
+      });
+
+      // Validate response
+      if (!res.ok) {
+        const errorData = await res.json();
+        return {
+          success: false,
+          message: errorData.message || "Failed to delete product",
+        };
+      }
+
+      const data = await res.json();
+
+      if (!data.success) {
+        return { success: false, message: data.message };
+      }
+
+      // Update state immediately for UI feedback
+      set((state) => ({
+        products: state.products.filter((product) => product._id !== pid),
+      }));
+
+      return { success: true, message: "Product Deleted Successfully" };
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      return { success: false, message: "An unexpected error occurred" };
+    }
+  },
 }));

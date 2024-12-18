@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useProductStore } from "../store/product";
+import { useNavigate } from "react-router-dom";
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
@@ -19,6 +20,8 @@ const CreatePage = () => {
   });
   const { createProduct } = useProductStore();
   const toast = useToast();
+
+  const navigateTo = useNavigate();
 
   const handleAddProduct = async () => {
     // console.log(newProduct);
@@ -33,7 +36,7 @@ const CreatePage = () => {
         status: "error",
         duration: 5000, // 5 seconds
         isClosable: true,
-        position: "bottom-left", 
+        position: "bottom-left",
       });
     } else {
       toast({
@@ -42,8 +45,9 @@ const CreatePage = () => {
         status: "success",
         duration: 5000, // 5 seconds
         isClosable: true,
-        position: "bottom-right", 
+        position: "bottom-right",
       });
+      navigateTo("/");
     }
     setNewProduct({ name: "", price: "", image: "" });
   };
